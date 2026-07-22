@@ -28,6 +28,16 @@ Some prompts to answer:
 - How do you choose which songs to recommend
 
 You can include a simple diagram or bullet list if helpful.
+- Each song is categorized by genre and mood with numeric features that include energy, tempo_bpm, valence, danceability, and acousticness
+- UserProfile stores the user's preferred value for each feature and a set of weights for how much each feature matters
+- The recommender computes a score by comparing each song to the UserProfile: 
+  - Categorical (genre, mood): earns a bonus when it matches exactly
+  - Numeric: earns a closeness score that rewards how near the song's value is to the user's preference
+  - Each result is multiplied by its weight with genre as the highest, then mood, then the vibe features
+  - All the points are summed into one total score per song
+- All songs are ranked by total score from highest to lowest and the top matches are returned as recommendations
+
+
 
 ---
 
