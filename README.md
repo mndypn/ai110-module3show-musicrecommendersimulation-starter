@@ -2,32 +2,14 @@
 
 ## Project Summary
 
-In this project you will build and explain a small music recommender system.
 
-Your goal is to:
-
-- Represent songs and a user "taste profile" as data
-- Design a scoring rule that turns that data into recommendations
-- Evaluate what your system gets right and wrong
-- Reflect on how this mirrors real world AI recommenders
-
-Replace this paragraph with your own summary of what your version does.
+My version is called MoodMatch 1.0. You give it a favorite genre, mood, and energy level, and it scores all 18 songs in the catalog and returns the top 5 with a reason for each pick. Genre matches earn +2.0, mood matches earn +1.5, and energy earns up to +2.0 based on how close a song is to your target. I also tested normal and edge-case listeners and ran a "Weight Shift" experiment to see how much the energy number controls the results.
 
 ---
 
 ## How The System Works
 
-Explain your design in plain language.
 
-Some prompts to answer:
-
-- What features does each `Song` use in your system
-  - For example: genre, mood, energy, tempo
-- What information does your `UserProfile` store
-- How does your `Recommender` compute a score for each song
-- How do you choose which songs to recommend
-
-You can include a simple diagram or bullet list if helpful.
 - Each song is categorized by genre and mood with numeric features that include energy, tempo_bpm, valence, danceability, and acousticness
 - UserProfile stores the user's preferred value for each feature and a set of weights for how much each feature matters
 - The recommender computes a score by comparing each song to the UserProfile: 
@@ -37,7 +19,7 @@ You can include a simple diagram or bullet list if helpful.
   - All the points are summed into one total score per song
 - All songs are ranked by total score from highest to lowest and the top matches are returned as recommendations
 
-
+Real recommenders like Spotify and YouTube do the same thing at scale. They use audio features (genre, mood, tempo) plus your listening history as the input for your preferences, then rank the whole catalog and return the top picks.
 
 ---
 
@@ -115,23 +97,16 @@ User profile: genre=pop, mood=happy, energy=0.8
 
 ## Experiments You Tried
 
-Use this section to document the experiments you ran. For example:
-
-- What happened when you changed the weight on genre from 2.0 to 0.5
-- What happened when you added tempo or valence to the score
-- How did your system behave for different types of users
+- I raised energy to 4.0 and dropped genre to 1.0. Energy took over the score and genre barely mattered.
+- I tested 3 normal listeners and 5 edge cases. Clear tastes got clean lists, but mood turned out to be a weak signal.
 
 ---
 
 ## Limitations and Risks
 
-Summarize some limitations of your recommender.
-
-Examples:
-
-- It only works on a tiny catalog
-- It does not understand lyrics or language
-- It might over favor one genre or mood
+- Tiny 18-song catalog, and most genres have only one song.
+- Energy dominates the score, so extreme-energy users match poorly.
+- Exact-match only, and it ignores tempo, valence, and other features.
 
 You will go deeper on this in your model card.
 
@@ -143,10 +118,7 @@ Read and complete `model_card.md`:
 
 [**Model Card**](model_card.md)
 
-Write 1 to 2 paragraphs here about what you learned:
-
-- about how recommenders turn data into predictions
-- about where bias or unfairness could show up in systems like this
+Recommenders turn songs and users into numbers, score how closely they line up, and treat the highest total as a prediction of what you'll like. There's no real understanding of the music, and the weights I picked quietly decided the whole ranking. That's where unfairness sneaks in: when energy dominated, extreme-energy listeners scored low everywhere while average users always matched. The same kinds of feature and weight choices shape what millions of people hear on real apps.
 
 
 

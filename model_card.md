@@ -2,60 +2,39 @@
 
 ## 1. Model Name  
 
-Give your model a short, descriptive name.  
-Example: **VibeFinder 1.0**  
+**MoodMatch 1.0**
+
+It picks songs that match your mood and energy, so the name says what it does.
 
 ---
 
 ## 2. Intended Use  
 
-Describe what your recommender is designed to do and who it is for. 
-
-Prompts:  
-
-- What kind of recommendations does it generate  
-- What assumptions does it make about the user  
-- Is this for real users or classroom exploration  
+You give it a favorite genre, mood, and energy level, and it returns the top 5 songs with a reason for each. It assumes you can name one genre, one mood, and one energy value that match the catalog's labels. This is for classroom exploration, not real users.
 
 ---
 
 ## 3. How the Model Works  
 
-Explain your scoring approach in simple language.  
+Each song earns points three ways, and the highest total wins:
 
-Prompts:  
+- **Genre:** +2.0 if it exactly matches your genre, else nothing.
+- **Mood:** +1.5 if it exactly matches your mood, else nothing.
+- **Energy:** up to +2.0 based on how close the song's energy (0 to 1) is to your target.
 
-- What features of each song are used (genre, energy, mood, etc.)  
-- What user preferences are considered  
-- How does the model turn those into a score  
-- What changes did you make from the starter logic  
-
-Avoid code here. Pretend you are explaining the idea to a friend who does not program.
+The model adds these up, sorts every song, and shows the top 5 with the reasons. It ignores the other features (tempo, valence, danceability, acousticness). The starter just returned the first few songs; I added the real scoring and sorting, and ran a "Weight Shift" experiment raising energy to 4.0 and lowering genre to 1.0 (see Limitations).
 
 ---
 
 ## 4. Data  
 
-Describe the dataset the model uses.  
-
-Prompts:  
-
-- How many songs are in the catalog  
-- What genres or moods are represented  
-- Did you add or remove data  
-- Are there parts of musical taste missing in the dataset  
+18 songs in one CSV. Each has a genre, mood, energy, and extra features (tempo, valence, danceability, acousticness) the model ignores. There are 15 genres, and only lofi has more than one song. I did not add or remove any data. Because most genres have just one song, there's no room for taste within a genre and no coverage of combos like "high energy and sad."
 
 ---
 
 ## 5. Strengths  
 
-Where does your system seem to work well  
-
-Prompts:  
-
-- User types for which it gives reasonable results  
-- Any patterns you think your scoring captures correctly  
-- Cases where the recommendations matched your intuition  
+It works best for clear, common tastes that exist in the catalog, like the Chill Lofi listener, whose top picks were all real lofi/chill songs. When a song matches on all three signals, it clearly wins, which matched my intuition. It also does a good job separating listeners by energy, so upbeat and mellow users get very different lists.
 
 ---
 
@@ -307,23 +286,12 @@ Terminal output from running `python -m src.main`, showing each user profile and
 
 ## 8. Future Work  
 
-Ideas for how you would improve the model next.  
-
-Prompts:  
-
-- Additional features or preferences  
-- Better ways to explain recommendations  
-- Improving diversity among the top results  
-- Handling more complex user tastes  
+- Add more songs per genre so a genre match isn't just one song.
+- Clamp energy to the 0 to 1 range so bad inputs can't create negative scores.
+- Give partial credit for related genres and moods instead of exact-match only.
 
 ---
 
 ## 9. Personal Reflection  
 
-A few sentences about your experience.  
-
-Prompts:  
-
-- What you learned about recommender systems  
-- Something unexpected or interesting you discovered  
-- How this changed the way you think about music recommendation apps  
+I learned that the weights you pick quietly decide everything. The biggest surprise was how one number, energy, could take over the whole ranking and push better matches down. It made me realize the music apps I use are full of choices like this, and those choices shape what I hear more than I ever noticed.
