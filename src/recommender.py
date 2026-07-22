@@ -68,9 +68,12 @@ def load_songs(csv_path: str) -> List[Dict]:
 def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
     """Score one song against the user's preferences and return (score, reasons)."""
     # --- Algorithm Recipe weights (tweak these to match your Phase 2 recipe) ---
-    GENRE_POINTS = 2.0   # awarded when the genre matches exactly
-    MOOD_POINTS = 1.5    # awarded when the mood matches exactly
-    ENERGY_WEIGHT = 2.0  # max points for a perfect energy match
+    # --- EXPERIMENT: Weight Shift ---
+    # Halved genre (2.0 -> 1.0) and doubled energy (2.0 -> 4.0) to test how
+    # sensitive the rankings are to the numeric energy feature vs. genre match.
+    GENRE_POINTS = 1.0   # awarded when the genre matches exactly (was 2.0)
+    MOOD_POINTS = 1.5    # awarded when the mood matches exactly (unchanged)
+    ENERGY_WEIGHT = 4.0  # max points for a perfect energy match (was 2.0)
 
     score = 0.0
     reasons: List[str] = []
